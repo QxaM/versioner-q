@@ -1,5 +1,6 @@
 #!/usr/bin/env groovy
 import cli.CliHandler
+import cli.IncorrectArgumentsNumber
 import cli.IncorrectLocationsProvided
 
 import java.util.logging.Logger
@@ -13,6 +14,10 @@ CliHandler cliHandler = new CliHandler(args)
 
 try {
     cliHandler.handleCli()
+} catch (IncorrectArgumentsNumber e) {
+    LOGGER.severe(e.getMessage())
+    println 'Provided incorrect number of arguments'
+    println 'Application expects only revision type'
 } catch (IncorrectLocationsProvided e) {
     LOGGER.severe(e.getMessage())
     println 'Provided too many or too little locations for versioner too scan'

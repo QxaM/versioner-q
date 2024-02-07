@@ -41,12 +41,16 @@ class CliHandler {
         }
     }
 
-    void handleCli() throws IncorrectLocationsProvided {
+    void handleCli() throws IncorrectLocationsProvided, IncorrectArgumentsNumber {
         options = cli.parse(args)
         extraArguments = options.arguments().flatten().findAll{ it != null }
 
         handleVerbose()
         printProvidedArguments()
+
+        if (extraArguments.size() != 2) {
+            throw new IncorrectArgumentsNumber('Provided incorrect number of arguments')
+        }
 
         handleFolderToScan()
 
@@ -63,6 +67,7 @@ class CliHandler {
 
     void printProvidedArguments() {
         if (verbose) {
+            LOGGER.info('Arguments size: ' + extraArguments.size())
             LOGGER.info('Provided arguments: ' + extraArguments)
         }
     }
