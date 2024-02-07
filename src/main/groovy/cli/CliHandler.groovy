@@ -8,6 +8,7 @@ import java.util.logging.Logger
 class CliHandler {
 
     def final static FORMAT = ' %-15s%s\n'
+    def final static FILE_REGEX = /.*(\\|\/).*/
 
     def final static LOGGER = Logger.getLogger('CliHandler')
 
@@ -15,6 +16,10 @@ class CliHandler {
     def options
     def args
     def verbose
+    def extraArguments
+
+    def projectType
+    def folderToScan
 
     CliHandler(args) {
         this.args = args
@@ -36,19 +41,57 @@ class CliHandler {
         }
     }
 
-    void handleCli() {
+    void handleCli() throws IncorrectLocationsProvided {
         options = cli.parse(args)
+        extraArguments = options.arguments().flatten().findAll{ it != null }
 
+        handleVerbose()
+        printProvidedArguments()
+
+        handleFolderToScan()
+
+        handleHelp()
+        handleVersion()
+    }
+
+    void handleVerbose() {
         if (options.'verbose') {
             verbose = true
             LOGGER.info('Logging more data from now on')
         }
+    }
 
+    void printProvidedArguments() {
+        if (verbose) {
+            LOGGER.info('Provided arguments: ' + extraArguments)
+        }
+    }
+
+    void handleFolderToScan() throws IncorrectLocationsProvided {
+        def fileFolder = extraArguments.findAll {
+            it =~ FILE_REGEX
+        }
+
+        if (fileFolder.size() == 1) {
+            folderToScan = fileFolder.get(0)
+        } else {
+            throw new IncorrectLocationsProvided("Provided none or too many locations to scan by " +
+                    "the versioner")
+        }
+
+        if (verbose) {
+            LOGGER.info('Found fileFolder(s): ' + fileFolder)
+        }
+    }
+
+    void handleHelp() {
         if (options.h) {
             cli.usage()
             cli.versionTypes()
         }
+    }
 
+    void handleVersion() {
         if (options.v) {
             Version.printVersion()
         }
