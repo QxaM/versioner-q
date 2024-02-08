@@ -20,6 +20,7 @@ class CliHandler {
 
     def projectType
     def folderToScan
+    def versionType
 
     CliHandler(args) {
         this.args = args
@@ -35,9 +36,9 @@ class CliHandler {
 
         cli.metaClass.versionTypes() {
             println '\nPossible version types: '
-            printf FORMAT, 'major', 'Increments major version number'
-            printf FORMAT, 'minor', 'Increments minor version number'
-            printf FORMAT, 'bugfix', 'Increments bugfix version number'
+            printf FORMAT, VersionType.MAJOR.versionType, 'Increments major version number'
+            printf FORMAT, VersionType.MINOR.versionType, 'Increments minor version number'
+            printf FORMAT, VersionType.BUGFIX.versionType, 'Increments bugfix version number'
         }
     }
 
@@ -53,6 +54,7 @@ class CliHandler {
         }
 
         handleFolderToScan()
+        handleVersionType()
 
         handleHelp()
         handleVersion()
@@ -87,6 +89,24 @@ class CliHandler {
         if (verbose) {
             LOGGER.info('Found fileFolder(s): ' + fileFolder)
         }
+    }
+
+    void handleVersionType() {
+        def versionTypes = VersionType.values().versionType
+
+        if (verbose) {
+            println 'Available version types: ' + versionTypes
+        }
+
+        def versions = extraArguments.intersect(versionTypes)
+        if (verbose) {
+            println 'Found version types in arguments: ' + versions
+        }
+
+        if (versions.size() != 1) {
+            throw new IncorrectVersionNumber('Provided incorrect number of version types')
+        }
+        versionType = versions.get(0)
     }
 
     void handleHelp() {
