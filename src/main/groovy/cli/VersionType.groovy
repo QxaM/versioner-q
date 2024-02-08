@@ -6,7 +6,7 @@ enum VersionType {
     MINOR('minor'),
     BUGFIX('bugfix')
 
-    def versionType
+    final def versionType
 
     VersionType(versionType) {
         this.versionType = versionType

@@ -14,10 +14,15 @@ dependencies {
         include '*.jar'
         include '*/*.jar'
     }
+    implementation 'org.apache.groovy:groovy-test:4.0.18'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testImplementation 'org.junit.vintage:junit-vintage-engine:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform() {
+        includeEngines 'junit-vintage'
+        includeEngines 'junit-jupiter'
+    }
 }
