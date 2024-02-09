@@ -12,9 +12,10 @@ class CliHandler {
 
     def final static LOGGER = Logger.getLogger('CliHandler')
 
-    def cli
+    final def cli
+    final def args
+
     def options
-    def args
     def verbose
     def extraArguments
 
@@ -40,17 +41,18 @@ class CliHandler {
             printf FORMAT, VersionType.MINOR.versionType, 'Increments minor version number'
             printf FORMAT, VersionType.BUGFIX.versionType, 'Increments bugfix version number'
         }
+
+        options = cli.parse(args)
+        extraArguments = options.arguments().flatten().findAll{ it != null }
     }
 
     void handleCli() throws IncorrectLocationsProvided, IncorrectArgumentsNumber {
-        options = cli.parse(args)
-        extraArguments = options.arguments().flatten().findAll{ it != null }
-
         handleVerbose()
         printProvidedArguments()
 
         if (extraArguments.size() != 2) {
-            throw new IncorrectArgumentsNumber('Provided incorrect number of arguments')
+            throw new IncorrectArgumentsNumber('Provided incorrect number of arguments! Provided ' +
+                    'arguments number: ' + extraArguments.size())
         }
 
         handleFolderToScan()
@@ -83,7 +85,7 @@ class CliHandler {
             folderToScan = fileFolder.get(0)
         } else {
             throw new IncorrectLocationsProvided("Provided none or too many locations to scan by " +
-                    "the versioner")
+                    "the versioner! Provided locations: " + fileFolder.size())
         }
 
         if (verbose) {
@@ -91,7 +93,7 @@ class CliHandler {
         }
     }
 
-    void handleVersionType() {
+    void handleVersionType() throws IncorrectVersionNumber {
         def versionTypes = VersionType.values().versionType
 
         if (verbose) {
@@ -104,7 +106,8 @@ class CliHandler {
         }
 
         if (versions.size() != 1) {
-            throw new IncorrectVersionNumber('Provided incorrect number of version types')
+            throw new IncorrectVersionNumber('Provided incorrect number of version types! ' +
+                    'Provided arguments: ' + versions.size())
         }
         versionType = versions.get(0)
     }
