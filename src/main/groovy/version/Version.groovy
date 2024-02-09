@@ -2,7 +2,7 @@ package version
 
 class Version {
 
-    def static final VERSION = '0.1.0.0'
+    def static final VERSION = '0.1.0.1'
 
     static printVersion() {
         printVersionQ()
@@ -10,7 +10,7 @@ class Version {
     }
 
     static printVersionQ() {
-        println 'Version-Q: ' + VERSION
+        println 'Versioner-Q: ' + VERSION
     }
 
     static printGroovyVersion() {
