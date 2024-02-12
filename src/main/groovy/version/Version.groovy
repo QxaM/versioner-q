@@ -2,7 +2,7 @@ package version
 
 class Version {
 
-    def static final VERSION = '0.2.0.0'
+    def static final VERSION = '0.3.0.0'
 
     static printVersion() {
         printVersionQ()
