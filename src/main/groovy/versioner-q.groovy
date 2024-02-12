@@ -2,7 +2,6 @@
 import cli.CliHandler
 import cli.IncorrectArgumentsNumber
 import cli.IncorrectLocationsProvided
-import scanner.folder.FolderScanner
 import scanner.folder.GradleFileLocation
 
 import java.util.logging.Logger
@@ -26,5 +25,5 @@ try {
     println 'Do not provide location to scan - run versioner from folder to scan'
 }
 
-FolderScanner fileLocation = new GradleFileLocation(cliHandler.verbose)
+GradleFileLocation fileLocation = new GradleFileLocation(cliHandler.verbose)
 def filePath = fileLocation.findFileLocation(cliHandler.folderToScan)
