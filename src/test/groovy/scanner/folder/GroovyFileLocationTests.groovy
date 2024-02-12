@@ -7,7 +7,7 @@ class GroovyFileLocationTests extends GroovyTestCase {
     void testReturnFileLocation() {
         // Given
         def location = 'C:/users/project'
-        GradleFileLocation gradleFileLocation = new GradleFileLocation()
+        GradleFileLocation gradleFileLocation = new GradleFileLocation(true)
 
         // When
         def fileLocation = gradleFileLocation.findFileLocation(location)
